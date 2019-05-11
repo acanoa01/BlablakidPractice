@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<project name="BlaBlaKid" basedir=".." default="todo">
+    <property name="src" value="src"/>
+    <property name="lib" value="lib/junit-4.8.2.jar"/>
+    <property name="classes" value="classes"/>
+    <property name="doc" value="doc"/>
+    <property name="conf" value="etc"/> 
+    <property name="test" value="test"/> 
+    <property name="log" value="log"/> 
+    <property name="paquetes" value="es.unileon.prg1.blablakid"/>
+
+    <target name="clean">
+      <delete dir="${classes}"/>
+      <delete dir="${doc}"/>
+    </target>
+
+    <target name="compilar" depends="clean">
+      <mkdir dir="${classes}"/>
+      <javac includeantruntime="false" srcdir="${src}" destdir="${classes}"/>
+      <echo message="Compilacion...terminada con exito"/>
+    </target>
+
+    <target name="compilarTest" depends="compilar">
+      <mkdir dir="${classes}"/>
+      <javac srcdir="${test}" destdir="${classes}" classpath="${lib}"
+		includeantruntime="false"/>
+      <echo message="Compilacion de Test...terminada con exito"/>
+    </target>
+
+    <target name="test" depends="compilarTest">
+		<java classname="org.junit.runner.JUnitCore">
+			<classpath>
+				<pathelement path="${classes}"/>
+				<pathelement path="${lib}"/>
+			</classpath>
+			<arg value="es.unileon.prg1.blablakid.AllTests"/>
+		</java>
+    </target>
+
+   <target name="documentar" depends="test">
+     <mkdir dir="${doc}"/>
+     <javadoc sourcepath="${src}" classpath="${lib}"
+     destdir="${doc}"
+     packagenames="${paquetes}"
+     verbose="false" author="true"
+     access="private" splitindex="true" version="true"
+     doctitle="BlaBlaKid"/>
+   </target>
+
+    <target name="ejecutar" depends="documentar">
+
+      <java classname="es.unileon.prg1.blablakid.MainBlablakid">
+	<arg value="3"/>
+         <classpath>
+              <pathelement path="${classes}"/>
+         </classpath>
+      </java>
+    </target>
+
+    <target name="todo" depends="ejecutar"/>
+
+</project>
